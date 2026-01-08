@@ -12,13 +12,17 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '12345', // Senin şifren
-      database: 'final_proje', // pgAdmin'de az önce oluşturduğumuz isim
+      // Render'daki DATABASE_URL'i okuması için url parametresini kullanıyoruz
+      url: process.env.DATABASE_URL || 'postgres://postgres:12345@localhost:5432/final_proje',
       entities: [User, Course, Lesson],
-      synchronize: true, // Bu true olduğu için tabloları kendi oluşturacak
+      synchronize: true, // Geliştirme aşamasında tabloları otomatik oluşturur
+      // Render PostgreSQL bağlantısı için gerekli SSL ayarı
+      ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,
+      extra: process.env.DATABASE_URL ? {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      } : {},
     }),
     UsersModule,
     CoursesModule,
