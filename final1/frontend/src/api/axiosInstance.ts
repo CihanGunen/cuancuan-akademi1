@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000', // NestJS backend adresi
+  // Vercel'e eklediğin VITE_API_URL değişkenini kullanır, 
+  // eğer bulamazsa yedek olarak Render linkini kullanır.
+  baseURL: import.meta.env.VITE_API_URL || 'https://cuancuan-akademi1.onrender.com',
 });
 
 // Her istek gönderilmeden önce burası çalışır
